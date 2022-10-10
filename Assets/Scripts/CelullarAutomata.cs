@@ -4,36 +4,50 @@ using UnityEngine;
 
 public class CelullarAutomata : MonoBehaviour
 {
-    public GameObject reticula;
-    public SpriteRenderer cubes;
-    public GameObject myCubes;
-    int j_reticula, cellSize, i_caHeight, randomNumber;
+    [SerializeField] GameObject platform;
+    [SerializeField] int j_reticula,i_caHeight,cellSize,caRule;
+    [SerializeField] bool isBasicCondition;
     bool[,] matrix;
     bool[] ruleSet;
     // Start is called before the first frame update
     void Start()
     {
+        matrix = new bool[i_caHeight, j_reticula];
+        ruleSet = new bool[8];
+
+        if (isBasicCondition)
+        {
+            BasicCondition();
+        }
+        else
+        {
+            RandomCondition();
+        }
         
+        
+        setRule(caRule);
+        Evolution();
+        paint();
     }
 
     public void Automata(int cells) {
-        cellSize = cells;
+        /*cellSize = cells;
         j_reticula = (int)reticula.GetComponent<Renderer>().bounds.size.x / cellSize;
-        i_caHeight = (int)reticula.GetComponent<Renderer>().bounds.size.y / cellSize;
-        matrix = new bool[i_caHeight,j_reticula];
-        ruleSet = new bool[8];
+        i_caHeight = (int)reticula.GetComponent<Renderer>().bounds.size.y / cellSize;*/
+        
+        
     }
 
     public void paint() {
         for (int i = 0; i <i_caHeight; i++) {
             for(int j=0; j < j_reticula; j++) {
                 if (matrix[i, j]) {
-                    cubes.color = new Color(0, 0, 0);
+                    Instantiate(platform, new Vector3(cellSize * i, 0, cellSize * j), Quaternion.identity,transform);
                 }
-                else {
+               /* else {
                     cubes.color = new Color(0, 0, 0);
-                }
-                Instantiate(myCubes, new Vector3(j*cellSize,i*cellSize), Quaternion.identity, reticula.transform);
+                }*/
+               //Instantiate(myCubes, new Vector3(j*cellSize,i*cellSize), Quaternion.identity, reticula.transform);
             }
         }
     }
@@ -45,8 +59,7 @@ public class CelullarAutomata : MonoBehaviour
     public void RandomCondition() {
         
         for(int j=0; j < j_reticula; j++) {
-            randomNumber = Random.Range(0, 2);
-            if (randomNumber == 1) {
+            if ((UnityEngine.Random.Range(0, 2)) == 1) {
                 matrix[0, j] = true;
             }
         }
@@ -54,9 +67,14 @@ public class CelullarAutomata : MonoBehaviour
 
     public void Evolution() {
         for (int i = 0; i < i_caHeight - 1; i++) {
-            for (int j = 0; j < j_reticula - 1; j++) {
+            for (int j = 0; j < j_reticula; j++) {
                 if (j == 0) {
-                    matrix[i + 1,j] = rule(matrix[i,j - 1], matrix[i,j], matrix[i,0]);
+                    matrix[i + 1,j] = rule(matrix[i,j_reticula - 1], matrix[i,j], matrix[i,j+1]);
+                    continue;
+                }
+                if (j == (j_reticula - 1))
+                {
+                    matrix[i + 1, j] = rule(matrix[i, j - 1], matrix[i, j], matrix[i, 0]);
                     continue;
                 }
                 matrix[i + 1,j] = rule(matrix[i,j - 1], matrix[i,j], matrix[i,j + 1]);
@@ -78,9 +96,10 @@ public class CelullarAutomata : MonoBehaviour
     }
 
 
-    /*void setRule(int rule) {
-        char[] srule = System.Convert.ToString (rule, 8).toCharArray();
-        for (int i = 0; i < srule.length; i++) {
+    void setRule(int rule) {
+        string sBinary = System.Convert.ToString(rule, 2).PadLeft(8, '0');
+        char[] srule = sBinary.ToCharArray();
+        for (int i = 0; i < srule.Length; i++) {
             if (srule[i] == '1') {
                 ruleSet[i] = true;
             }
@@ -89,7 +108,7 @@ public class CelullarAutomata : MonoBehaviour
             }
         }
 
-    }*/
+    }
 
 
 }
