@@ -2,54 +2,38 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CelullarAutomata : MonoBehaviour
+public class FlowersAutomata : MonoBehaviour
 {
-    [SerializeField] List<GameObject> platforms;
-    [SerializeField] GameObject platform;
-    [SerializeField] GameObject otherPlatform;
-    [SerializeField] int j_reticula,i_caHeight,cellSize,caRule;
+    [SerializeField] List<GameObject> flowers;
+    [SerializeField] int randomRule;
+    [SerializeField] int randomFlower;
+    [SerializeField] Transform targetPlatform;
+    [SerializeField] int j_reticula, i_caHeight, cellSize, caRule;
     [SerializeField] bool isBasicCondition;
     bool[,] matrix;
     bool[] ruleSet;
     // Start is called before the first frame update
-    void Start()
-    {
+    void Start() {
+        randomRule = Random.Range(1, 257);
         matrix = new bool[i_caHeight, j_reticula];
         ruleSet = new bool[8];
-
-        if (isBasicCondition)
-        {
-            BasicCondition();
-        }
-        else
-        {
-            RandomCondition();
-        }
-        
-        
-        setRule(caRule);
+        RandomCondition();
+        setRule(randomRule);
         Evolution();
         paint();
     }
 
-    public void Automata(int cells) {
-        /*cellSize = cells;
-        j_reticula = (int)reticula.GetComponent<Renderer>().bounds.size.x / cellSize;
-        i_caHeight = (int)reticula.GetComponent<Renderer>().bounds.size.y / cellSize;*/
-        
-        
-    }
-
     public void paint() {
-        for (int i = 0; i <i_caHeight; i++) {
-            for(int j=0; j < j_reticula; j++) {
+        for (int i = 0; i < i_caHeight; i++) {
+            for (int j = 0; j < j_reticula; j++) {
+                randomFlower = Random.Range(0, flowers.Count);
                 if (matrix[i, j]) {
-                    Instantiate(platform, new Vector3(cellSize * i, 0, cellSize * j), Quaternion.identity,transform);
+                    Instantiate(flowers[randomFlower], new Vector3((transform.position.x-10) + (i* cellSize), targetPlatform.position.y+2f, (transform.position.z - 10) + (j * cellSize)), Quaternion.identity, transform);
                 }
-               else {
-                    Instantiate(otherPlatform, new Vector3(cellSize * i, 0, cellSize * j), Quaternion.identity, transform);
-                }
-               //Instantiate(myCubes, new Vector3(j*cellSize,i*cellSize), Quaternion.identity, reticula.transform);
+                /*else {
+                    Instantiate(flowers[randomFlower], new Vector3((transform.position.x - 10) + (i * cellSize), targetPlatform.position.y + 2.5f, (transform.position.z - 10) + (j * cellSize)), Quaternion.identity, transform);
+                }*/
+                //Instantiate(myCubes, new Vector3(j*cellSize,i*cellSize), Quaternion.identity, reticula.transform);
             }
         }
     }
@@ -59,8 +43,8 @@ public class CelullarAutomata : MonoBehaviour
     }
 
     public void RandomCondition() {
-        
-        for(int j=0; j < j_reticula; j++) {
+
+        for (int j = 0; j < j_reticula; j++) {
             if ((UnityEngine.Random.Range(0, 2)) == 1) {
                 matrix[0, j] = true;
             }
@@ -71,21 +55,20 @@ public class CelullarAutomata : MonoBehaviour
         for (int i = 0; i < i_caHeight - 1; i++) {
             for (int j = 0; j < j_reticula; j++) {
                 if (j == 0) {
-                    matrix[i + 1,j] = rule(matrix[i,j_reticula - 1], matrix[i,j], matrix[i,j+1]);
+                    matrix[i + 1, j] = rule(matrix[i, j_reticula - 1], matrix[i, j], matrix[i, j + 1]);
                     continue;
                 }
-                if (j == (j_reticula - 1))
-                {
+                if (j == (j_reticula - 1)) {
                     matrix[i + 1, j] = rule(matrix[i, j - 1], matrix[i, j], matrix[i, 0]);
                     continue;
                 }
-                matrix[i + 1,j] = rule(matrix[i,j - 1], matrix[i,j], matrix[i,j + 1]);
+                matrix[i + 1, j] = rule(matrix[i, j - 1], matrix[i, j], matrix[i, j + 1]);
             }
         }
     }
 
 
-   public bool rule(bool a, bool b, bool c) {
+    public bool rule(bool a, bool b, bool c) {
         if (a && b && c) return ruleSet[7];
         if (a && b && !c) return ruleSet[6];
         if (a && !b && c) return ruleSet[5];
@@ -111,6 +94,4 @@ public class CelullarAutomata : MonoBehaviour
         }
 
     }
-
-
 }
