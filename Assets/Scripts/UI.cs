@@ -5,11 +5,23 @@ using UnityEngine.SceneManagement;
 
 public class UI : MonoBehaviour
 {
+    public GameObject pauseUI;
     public void PlayGame() {
         SceneManager.LoadScene(1);
     }
+    public void GoToMenu() {
+        SceneManager.LoadScene(0);
+        Time.timeScale = 1;
+    }
+    public void ContinueGame() {
+        pauseUI.SetActive(false);
+        Time.timeScale = 1;
+    }
 
-    private void Update() {
-        
+    void Update() {
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            pauseUI.SetActive(true);
+            Time.timeScale = 0;
+        }
     }
 }
