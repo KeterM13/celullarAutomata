@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 1641502403}
   m_Layer: 0
   m_Name: PP_Meadow_Path_05
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -125,8 +125,12 @@ MonoBehaviour:
   - {fileID: 8954726919292774957, guid: eae42a57b046b1a42a79ae6319bccca3, type: 3}
   - {fileID: 7749838506462483410, guid: d354c41a99993964baca0254487708d1, type: 3}
   - {fileID: 3318689441606926373, guid: d3ee913ed32937344b0587e70dc777a2, type: 3}
+  mouse: {fileID: 7845907686940235722, guid: a02821e528e59c54190e2dd0c0b6029d, type: 3}
+  cat: {fileID: 142387181887277380, guid: 7fafdd699f49d3e40acac76eef8738ab, type: 3}
   randomRule: 0
   randomFlower: 0
+  randomMouse: 0
+  randomCat: 0
   targetPlatform: {fileID: 8890356699427785745}
   j_reticula: 5
   i_caHeight: 5

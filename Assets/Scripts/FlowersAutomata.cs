@@ -5,8 +5,12 @@ using UnityEngine;
 public class FlowersAutomata : MonoBehaviour
 {
     [SerializeField] List<GameObject> flowers;
+    [SerializeField] GameObject mouse;
+    [SerializeField] GameObject cat;
     [SerializeField] int randomRule;
     [SerializeField] int randomFlower;
+    [SerializeField] int randomMouse;
+    [SerializeField] int randomCat;
     [SerializeField] Transform targetPlatform;
     [SerializeField] int j_reticula, i_caHeight, cellSize, caRule;
     [SerializeField] bool isBasicCondition;
@@ -27,13 +31,17 @@ public class FlowersAutomata : MonoBehaviour
         for (int i = 0; i < i_caHeight; i++) {
             for (int j = 0; j < j_reticula; j++) {
                 randomFlower = Random.Range(0, flowers.Count);
+                randomMouse = Random.Range(0, 2);
+                randomCat = Random.Range(0, 2);
                 if (matrix[i, j]) {
                     Instantiate(flowers[randomFlower], new Vector3((transform.position.x-10) + (i* cellSize), targetPlatform.position.y+2f, (transform.position.z - 10) + (j * cellSize)), Quaternion.identity, transform);
+                    if (randomMouse == 1) {
+                        Instantiate(mouse, new Vector3((transform.position.x - 10) + (i * cellSize), targetPlatform.position.y + 2f, (transform.position.z - 10) + (j * cellSize)), Quaternion.identity, transform);
+                    }
+                    if (randomCat == 1) {
+                        Instantiate(cat, new Vector3((transform.position.x - 10) + (i * cellSize), targetPlatform.position.y + 2f, (transform.position.z - 10) + (j * cellSize)), Quaternion.identity, transform);
+                    }
                 }
-                /*else {
-                    Instantiate(flowers[randomFlower], new Vector3((transform.position.x - 10) + (i * cellSize), targetPlatform.position.y + 2.5f, (transform.position.z - 10) + (j * cellSize)), Quaternion.identity, transform);
-                }*/
-                //Instantiate(myCubes, new Vector3(j*cellSize,i*cellSize), Quaternion.identity, reticula.transform);
             }
         }
     }
