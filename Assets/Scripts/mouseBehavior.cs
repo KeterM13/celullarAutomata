@@ -25,6 +25,7 @@ public class mouseBehavior : MonoBehaviour
     public List<GameObject> perception;
     [SerializeField] private Transform food;
     public string gender;
+    public int age;
 
     private int aiUpdateRate = 10;
     private int frameCount;
@@ -53,7 +54,8 @@ public class mouseBehavior : MonoBehaviour
             default:
                 break;
         }
-        energy = Random.Range(10, 101);
+        energy = Random.Range(60, 101);
+        age = Random.Range(1, 31);
         rb = GetComponent<Rigidbody>();
         currentState = State.spawn;
         health = 1;
@@ -66,6 +68,7 @@ public class mouseBehavior : MonoBehaviour
         timeToLooseEnergy += Time.deltaTime;
         if(timeToLooseEnergy>=2) {
             energy -= 1;
+            age += 1;
             timeToLooseEnergy = 0;
         }
 
@@ -101,6 +104,9 @@ public class mouseBehavior : MonoBehaviour
         }
         if(currentState==State.off) {
             Off();
+        }
+        if (age >= 48) {
+            currentState = State.dying;
         }
     }
 
@@ -142,7 +148,7 @@ public class mouseBehavior : MonoBehaviour
     }
     public void Escape() {
         speed = runSpeed;
-        energy -= 10;
+        //energy -= 10;
         timeToEscape += Time.deltaTime;
         if (timeToEscape >= runTime) {
             speed = 200;
@@ -188,7 +194,6 @@ public class mouseBehavior : MonoBehaviour
         for (int i = 0; i < perception.Count; i++) {
             if (perception[i].TryGetComponent<Cats>(out Cats catObject)) {
                 hardFlip = true;
-                catNear = true;
                 currentState = State.escape;
                 break;
             }
@@ -225,12 +230,14 @@ public class mouseBehavior : MonoBehaviour
 
         perception.Add(other.gameObject);
 
-        
+        if (other.gameObject.CompareTag("Cat")) {
+            catNear = true;
+        }
 
-        //if (other.gameObject.CompareTag("Mouse")) {
-        //    if (other.GetComponent<mouseBehavior>().gender != this.gender) {
-        //        Love();
-        //    }
-        //}
+        if (other.gameObject.CompareTag("Mouse") && age>=15) {
+            if (other.GetComponent<mouseBehavior>().gender != this.gender && other.GetComponent<mouseBehavior>().age>=15) {
+                Love();
+            }
+        }
     }
 }

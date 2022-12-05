@@ -11,7 +11,9 @@ public class Cats : MonoBehaviour
     public bool hardFlip;
     public bool mustEat;
     public bool hadEaten;
+    public bool canLove;
     public int energy;
+    public int age;
     public float runTime;
     public float time;
     public float timeToLooseEnergy;
@@ -48,7 +50,9 @@ public class Cats : MonoBehaviour
             default:
                 break;
         }
-        energy = Random.Range(10, 101);
+        canLove = false;
+        energy = Random.Range(50, 101);
+        age = Random.Range(1, 49);
         rb = GetComponent<Rigidbody>();
         currentState = State.spawn;
 
@@ -90,6 +94,9 @@ public class Cats : MonoBehaviour
         }
         if (currentState == State.off) {
             Off();
+        }
+        if (canLove) {
+            Love();
         }
     }
 
@@ -157,6 +164,7 @@ public class Cats : MonoBehaviour
 
     public void Love() {
         Instantiate(babyCat, this.transform);
+        canLove = false;
     }
 
     public void CheckForTarget() { //cambiar a ratones
@@ -202,10 +210,10 @@ public class Cats : MonoBehaviour
 
 
 
-        //if (other.gameObject.CompareTag("Cat")) {
-        //    if (other.GetComponent<Cats>().gender != this.gender) {
-        //        Love();
-        //    }
-        //}
+        if (other.gameObject.CompareTag("Cat")&& age>=48) {
+            if (other.GetComponent<Cats>().gender != this.gender && other.GetComponent<Cats>().age>=48) {
+                canLove = true;
+            }
+        }
     }
 }
