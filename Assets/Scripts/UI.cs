@@ -18,6 +18,7 @@ public class UI : MonoBehaviour
         Time.timeScale = 1;
     }
 
+
     void Update() {
         if (Input.GetKeyDown(KeyCode.Escape)) {
             pauseUI.SetActive(true);

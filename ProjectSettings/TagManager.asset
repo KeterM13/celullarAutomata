@@ -8,6 +8,8 @@ TagManager:
   - Plant
   - Mouse
   - Cat
+  - Water
+  - Fire
   layers:
   - Default
   - TransparentFX

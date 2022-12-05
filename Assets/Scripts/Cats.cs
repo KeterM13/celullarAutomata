@@ -22,7 +22,7 @@ public class Cats : MonoBehaviour
     private int genderSelec;
     public Rigidbody rb;
     public List<GameObject> perception;
-
+    public int health;
     public string gender;
 
     private int aiUpdateRate = 10;
@@ -55,7 +55,7 @@ public class Cats : MonoBehaviour
         age = Random.Range(1, 49);
         rb = GetComponent<Rigidbody>();
         currentState = State.spawn;
-
+        health = 3;
     }
 
     void Update() {
@@ -95,9 +95,12 @@ public class Cats : MonoBehaviour
         if (currentState == State.off) {
             Off();
         }
-        if (canLove) {
-            Love();
+        if(health<=0) {
+            currentState = State.dying;
         }
+        //if (canLove) {
+        //    Love();
+        //}
     }
 
     public void Spawn() {
@@ -214,6 +217,13 @@ public class Cats : MonoBehaviour
             if (other.GetComponent<Cats>().gender != this.gender && other.GetComponent<Cats>().age>=48) {
                 canLove = true;
             }
+        }
+        if(other.gameObject.CompareTag("Water")) {
+            hardFlip = true;
+            mustFlip = true;
+        }
+        if (other.gameObject.CompareTag("Fire")) {
+            health -= 1;
         }
     }
 }

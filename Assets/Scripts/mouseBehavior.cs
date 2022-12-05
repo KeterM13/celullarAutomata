@@ -12,6 +12,7 @@ public class mouseBehavior : MonoBehaviour
     public bool mustEat;
     public bool catNear;
     public bool hadEaten;
+    public bool canLove;
     public int energy;
     public float runTime;
     public float time;
@@ -108,6 +109,12 @@ public class mouseBehavior : MonoBehaviour
         if (age >= 48) {
             currentState = State.dying;
         }
+        if(health<=0) {
+            currentState = State.dying;
+        }
+        //if (canLove) {
+        //    Love();
+        //}
     }
 
     public void Spawn() {
@@ -188,6 +195,7 @@ public class mouseBehavior : MonoBehaviour
 
     public void Love() {
         Instantiate(babyMouse, this.transform);
+        canLove = false;
     }
 
     public void CheckForTarget() {
@@ -236,8 +244,14 @@ public class mouseBehavior : MonoBehaviour
 
         if (other.gameObject.CompareTag("Mouse") && age>=15) {
             if (other.GetComponent<mouseBehavior>().gender != this.gender && other.GetComponent<mouseBehavior>().age>=15) {
-                Love();
+                canLove = true;
             }
+        }
+        if (other.gameObject.CompareTag("Water")) {
+            health += 1;
+        }
+        if (other.gameObject.CompareTag("Fire")) {
+            health -= 1;
         }
     }
 }
